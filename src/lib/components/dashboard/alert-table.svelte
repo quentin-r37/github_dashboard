@@ -156,9 +156,3 @@
 		</Table.Body>
 	</Table.Root>
 </div>
-
-{#if alerts.length > 0}
-	<p class="text-xs text-muted-foreground mt-2">
-		Showing {alerts.length} alert{alerts.length === 1 ? "" : "s"}
-	</p>
-{/if}

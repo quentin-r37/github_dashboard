@@ -3,6 +3,7 @@
 	import AlertFilters from "$lib/components/dashboard/alert-filters.svelte";
 	import AlertTable from "$lib/components/dashboard/alert-table.svelte";
 	import AlertDetailPanel from "$lib/components/dashboard/alert-detail-panel.svelte";
+	import { Pagination } from "$lib/components/ui/pagination/index.js";
 	import AlertTriangle from "@lucide/svelte/icons/triangle-alert";
 	import type { AlertFilters as AlertFiltersType } from "$lib/types/filters.js";
 	import type { SortConfig } from "$lib/types/filters.js";
@@ -34,6 +35,9 @@
 		field: "severity",
 		direction: "asc",
 	});
+
+	let currentPage = $state(1);
+	let pageSize = $state(25);
 
 	let selectedAlert = $state<SecurityAlert | null>(null);
 	let detailOpen = $state(false);
@@ -103,6 +107,19 @@
 
 		return result;
 	});
+
+	let totalPages = $derived(Math.max(1, Math.ceil(filteredAlerts.length / pageSize)));
+
+	let paginatedAlerts = $derived(
+		filteredAlerts.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+	);
+
+	$effect(() => {
+		// Reset to page 1 when filters or sort change
+		filters;
+		sort;
+		currentPage = 1;
+	});
 </script>
 
 <svelte:head>
@@ -129,11 +146,22 @@
 	/>
 
 	<AlertTable
-		alerts={filteredAlerts}
+		alerts={paginatedAlerts}
 		{sort}
 		onsort={(s) => (sort = s)}
 		onselect={handleSelectAlert}
 	/>
+
+	{#if filteredAlerts.length > 0}
+		<Pagination
+			{currentPage}
+			{totalPages}
+			totalItems={filteredAlerts.length}
+			{pageSize}
+			onpagechange={(p) => (currentPage = p)}
+			onpagesizechange={(s) => { pageSize = s; currentPage = 1; }}
+		/>
+	{/if}
 </div>
 
 <AlertDetailPanel

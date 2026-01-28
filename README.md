@@ -2,6 +2,8 @@
 
 A dashboard that aggregates code scanning, secret scanning, and Dependabot alerts from your GitHub repositories into a unified interface.
 
+From an idea of [AnceretMatthieu](https://github.com/AnceretMatthieu).
+
 ![Dashboard screenshot](static/Macbook-Air-localhost.png)
 
 ## Setup
