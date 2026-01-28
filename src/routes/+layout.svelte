@@ -2,6 +2,7 @@
 	import "../app.css";
 	import favicon from "$lib/assets/favicon.svg";
 	import RefreshButton from "$lib/components/dashboard/refresh-button.svelte";
+	import ThemeToggle from "$lib/components/ui/theme-toggle.svelte";
 	import ShieldCheck from "@lucide/svelte/icons/shield-check";
 
 	let { children, data } = $props();
@@ -23,7 +24,10 @@
 					</span>
 				{/if}
 			</div>
-			<RefreshButton />
+			<div class="flex items-center gap-2">
+				<ThemeToggle />
+				<RefreshButton />
+			</div>
 		</div>
 	</header>
 

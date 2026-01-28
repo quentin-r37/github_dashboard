@@ -17,7 +17,8 @@
       "Bash(git -C \"C:\\\\repo\\\\perso\\\\github_dashboard\" log --oneline)",
       "Bash(npm run check:*)",
       "mcp__svelte__svelte-autofixer",
-      "WebFetch(domain:docs.github.com)"
+      "WebFetch(domain:docs.github.com)",
+      "Bash(dir:*)"
     ]
   }
 }

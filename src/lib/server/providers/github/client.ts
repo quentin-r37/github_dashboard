@@ -33,7 +33,13 @@ export class GitHubClient {
 			).toISOString(),
 		};
 
-		if (res.status === 404 || res.status === 403) {
+		if (res.status === 403) {
+			console.warn(`GitHub API 403 Forbidden: ${path} — check that your PAT has the required scopes (security_events for code scanning)`);
+			return [] as T;
+		}
+
+		if (res.status === 404) {
+			console.warn(`GitHub API 404 Not Found: ${path} — this feature may not be enabled for the repository`);
 			return [] as T;
 		}
 
