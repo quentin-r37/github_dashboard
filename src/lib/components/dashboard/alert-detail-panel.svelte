@@ -295,7 +295,7 @@
 				<Separator />
 				<div>
 					<h3 class="text-sm font-medium mb-1">Description</h3>
-					<p class="text-sm text-muted-foreground whitespace-pre-wrap">{alert.description}</p>
+					<div class="text-sm text-muted-foreground prose prose-sm dark:prose-invert max-w-none">{@html renderMarkdown(alert.description)}</div>
 				</div>
 			{/if}
 
