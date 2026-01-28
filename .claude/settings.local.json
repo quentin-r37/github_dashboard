@@ -12,7 +12,11 @@
       "Bash(npm ls:*)",
       "Bash(where:*)",
       "Bash(mkcert -install:*)",
-      "Bash(mkcert:*)"
+      "Bash(mkcert:*)",
+      "Bash(tree:*)",
+      "Bash(git -C \"C:\\\\repo\\\\perso\\\\github_dashboard\" log --oneline)",
+      "Bash(npm run check:*)",
+      "mcp__svelte__svelte-autofixer"
     ]
   }
 }
