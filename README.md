@@ -1,42 +1,38 @@
-# sv
+# GitHub Security Dashboard
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A dashboard that aggregates code scanning, secret scanning, and Dependabot alerts from your GitHub repositories into a unified interface.
 
-## Creating a project
+Built with SvelteKit, Svelte 5, and Tailwind CSS v4.
 
-If you're seeing this, you've probably already done this step. Congrats!
+![Dashboard screenshot](static/Macbook-Air-localhost.png)
 
-```sh
-# create a new project
-npx sv create my-app
+## Setup
+
+```bash
+npm install
 ```
 
-To recreate this project with the same configuration:
+Copy `.env.example` to `.env` and fill in:
 
-```sh
-# recreate this project
-npx sv create --template minimal --types ts --no-install .
+```
+GITHUB_PAT=<your token with security_events scope>
+DASHBOARD_REPOS=owner/repo1,owner/repo2
+ALERT_CACHE_TTL_SECONDS=300
 ```
 
-## Developing
+## Development
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+## Build
 
-To create a production version of your app:
-
-```sh
+```bash
 npm run build
+npm run preview
 ```
 
-You can preview the production build with `npm run preview`.
+## License
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+[MIT](LICENSE)

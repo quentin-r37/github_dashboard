@@ -5,6 +5,8 @@
 	import SeverityBadge from "./severity-badge.svelte";
 	import AlertTypeIcon from "./alert-type-icon.svelte";
 	import ExternalLink from "@lucide/svelte/icons/external-link";
+	import Check from "@lucide/svelte/icons/check";
+	import BotMessageSquare from "@lucide/svelte/icons/bot-message-square";
 	import { marked } from "marked";
 	import DOMPurify from "dompurify";
 	import type { SecurityAlert } from "$lib/types/alerts.js";
@@ -52,6 +54,41 @@
 			}
 		}
 		return loc;
+	}
+
+	let copied = $state(false);
+
+	function buildFixPrompt(a: SecurityAlert): string {
+		const repo = a.repository;
+		switch (a.type) {
+			case "code_scanning": {
+				const loc = formatLocation(a) || a.target || "unknown location";
+				const rule = a.ruleId ? ` (${a.ruleId})` : "";
+				return `Fix the ${a.severity} security issue "${a.title}"${rule} in ${repo} at ${loc}.`;
+			}
+			case "secret_scanning": {
+				const secret = a.secretTypeDisplayName || a.secretType || "secret";
+				const file = a.target ? ` in ${a.target}` : "";
+				return `Remove the exposed ${secret}${file} in ${repo} and rotate the credential.`;
+			}
+			case "dependabot": {
+				const pkg = a.packageName || "the vulnerable dependency";
+				const patch = a.patchedVersion ? ` to ${a.patchedVersion}` : "";
+				const vuln = a.cveId || a.ghsaId || "";
+				const vulnSuffix = vuln ? ` to fix ${vuln}` : "";
+				return `Update ${pkg}${patch} in ${repo}${vulnSuffix}.`;
+			}
+			default:
+				return `Fix the ${a.severity} security alert "${a.title}" in ${repo}.`;
+		}
+	}
+
+	async function copyPrompt() {
+		if (!alert) return;
+		const prompt = buildFixPrompt(alert);
+		await navigator.clipboard.writeText(prompt);
+		copied = true;
+		setTimeout(() => (copied = false), 2000);
 	}
 </script>
 
@@ -261,6 +298,22 @@
 					<p class="text-sm text-muted-foreground whitespace-pre-wrap">{alert.description}</p>
 				</div>
 			{/if}
+
+			<!-- Fix prompt floating button -->
+			<div class="sticky bottom-0 pt-4 mt-auto">
+				<button
+					onclick={copyPrompt}
+					class="w-full flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium shadow-lg hover:bg-primary/90 transition-colors cursor-pointer"
+				>
+					{#if copied}
+						<Check class="size-4" />
+						Copied!
+					{:else}
+						<BotMessageSquare class="size-4" />
+						Copy fix prompt
+					{/if}
+				</button>
+			</div>
 		{/if}
 	</Sheet.Content>
 </Sheet.Root>
