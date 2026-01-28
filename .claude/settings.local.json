@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npx sv:*)",
+      "Bash(npm install)",
+      "Bash(npx shadcn-svelte@latest init:*)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn-svelte@latest add:*)",
+      "Bash(npm run build:*)",
+      "Bash(git init:*)",
+      "Bash(npm ls:*)",
+      "Bash(where:*)",
+      "Bash(mkcert -install:*)",
+      "Bash(mkcert:*)"
+    ]
+  }
+}
