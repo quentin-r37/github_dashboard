@@ -33,7 +33,7 @@ export class GitHubClient {
 			).toISOString(),
 		};
 
-		if (res.status === 404) {
+		if (res.status === 404 || res.status === 403) {
 			return [] as T;
 		}
 
