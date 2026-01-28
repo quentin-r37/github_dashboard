@@ -19,6 +19,7 @@ function normalizeState(raw: string | null | undefined): AlertState {
 }
 
 export function mapCodeScanningAlert(alert: GhAlert, repo: string): SecurityAlert {
+	const loc = alert.most_recent_instance?.location;
 	return {
 		id: `github:${repo}:code_scanning:${alert.number}`,
 		type: "code_scanning",
@@ -35,7 +36,18 @@ export function mapCodeScanningAlert(alert: GhAlert, repo: string): SecurityAler
 		updatedAt: alert.updated_at || alert.created_at || "",
 		fixedAt: alert.fixed_at || null,
 		tool: alert.tool?.name || null,
-		target: alert.most_recent_instance?.location?.path || null,
+		target: loc?.path || null,
+		ruleId: alert.rule?.id || undefined,
+		ruleHelp: alert.rule?.help || undefined,
+		ruleTags: alert.rule?.tags?.length ? alert.rule.tags : undefined,
+		locationStartLine: loc?.start_line ?? undefined,
+		locationEndLine: loc?.end_line ?? undefined,
+		locationStartColumn: loc?.start_column ?? undefined,
+		locationEndColumn: loc?.end_column ?? undefined,
+		classifications: alert.most_recent_instance?.classifications?.length
+			? alert.most_recent_instance.classifications
+			: undefined,
+		instanceRef: alert.most_recent_instance?.ref || undefined,
 	};
 }
 
@@ -55,6 +67,11 @@ export function mapSecretScanningAlert(alert: GhAlert, repo: string): SecurityAl
 		fixedAt: alert.resolved_at || null,
 		tool: "secret_scanning",
 		target: null,
+		secretType: alert.secret_type || undefined,
+		secretTypeDisplayName: alert.secret_type_display_name || undefined,
+		pushProtectionBypassed: alert.push_protection_bypassed ?? undefined,
+		pushProtectionBypassedBy: alert.push_protection_bypassed_by?.login || undefined,
+		pushProtectionBypassedAt: alert.push_protection_bypassed_at || undefined,
 	};
 }
 
@@ -79,5 +96,20 @@ export function mapDependabotAlert(alert: GhAlert, repo: string): SecurityAlert 
 		fixedAt: alert.fixed_at || alert.auto_dismissed_at || null,
 		tool: "dependabot",
 		target: vulnerability?.package?.name || alert.dependency?.package?.name || null,
+		cveId: advisory?.cve_id || undefined,
+		ghsaId: advisory?.ghsa_id || undefined,
+		cvssScore: advisory?.cvss?.score ?? undefined,
+		cvssVector: advisory?.cvss?.vector_string || undefined,
+		cwes: advisory?.cwes?.length
+			? advisory.cwes.map((c: { cwe_id: string }) => c.cwe_id)
+			: undefined,
+		advisoryReferences: advisory?.references?.length
+			? advisory.references.map((r: { url: string }) => r.url)
+			: undefined,
+		patchedVersion: vulnerability?.first_patched_version?.identifier || undefined,
+		vulnerableVersionRange: vulnerability?.vulnerable_version_range || undefined,
+		packageName: vulnerability?.package?.name || alert.dependency?.package?.name || undefined,
+		packageEcosystem: vulnerability?.package?.ecosystem || alert.dependency?.package?.ecosystem || undefined,
+		manifestPath: alert.dependency?.manifest_path || undefined,
 	};
 }

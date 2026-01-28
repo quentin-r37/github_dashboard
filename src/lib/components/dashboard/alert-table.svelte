@@ -14,9 +14,10 @@
 		alerts: SecurityAlert[];
 		sort: SortConfig;
 		onsort: (sort: SortConfig) => void;
+		onselect?: (alert: SecurityAlert) => void;
 	}
 
-	let { alerts, sort, onsort }: Props = $props();
+	let { alerts, sort, onsort, onselect }: Props = $props();
 
 	function handleSort(field: SortField) {
 		if (sort.field === field) {
@@ -103,7 +104,10 @@
 				</Table.Row>
 			{:else}
 				{#each alerts as alert (alert.id)}
-					<Table.Row>
+					<Table.Row
+						class="cursor-pointer hover:bg-muted/50"
+						onclick={() => onselect?.(alert)}
+					>
 						<Table.Cell>
 							<AlertTypeIcon type={alert.type} />
 						</Table.Cell>
@@ -134,11 +138,13 @@
 						</Table.Cell>
 						<Table.Cell>
 							{#if alert.htmlUrl}
+								<!-- svelte-ignore a11y_no_static_element_interactions -->
 								<a
 									href={alert.htmlUrl}
 									target="_blank"
 									rel="noopener noreferrer"
 									class="text-muted-foreground hover:text-foreground transition-colors"
+									onclick={(e) => e.stopPropagation()}
 								>
 									<ExternalLink class="size-4" />
 								</a>

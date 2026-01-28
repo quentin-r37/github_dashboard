@@ -18,7 +18,8 @@
       "Bash(npm run check:*)",
       "mcp__svelte__svelte-autofixer",
       "WebFetch(domain:docs.github.com)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(npx:*)"
     ]
   }
 }

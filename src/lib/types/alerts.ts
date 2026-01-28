@@ -21,4 +21,35 @@ export interface SecurityAlert {
 	fixedAt: string | null;
 	tool: string | null;
 	target: string | null;
+
+	// Code scanning details
+	ruleId?: string;
+	ruleHelp?: string;
+	ruleTags?: string[];
+	locationStartLine?: number;
+	locationEndLine?: number;
+	locationStartColumn?: number;
+	locationEndColumn?: number;
+	classifications?: string[];
+	instanceRef?: string;
+
+	// Secret scanning details
+	secretType?: string;
+	secretTypeDisplayName?: string;
+	pushProtectionBypassed?: boolean;
+	pushProtectionBypassedBy?: string;
+	pushProtectionBypassedAt?: string;
+
+	// Dependabot details
+	cveId?: string;
+	ghsaId?: string;
+	cvssScore?: number;
+	cvssVector?: string;
+	cwes?: string[];
+	advisoryReferences?: string[];
+	patchedVersion?: string;
+	vulnerableVersionRange?: string;
+	packageName?: string;
+	packageEcosystem?: string;
+	manifestPath?: string;
 }

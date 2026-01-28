@@ -2,10 +2,11 @@
 	import KpiGrid from "$lib/components/dashboard/kpi-grid.svelte";
 	import AlertFilters from "$lib/components/dashboard/alert-filters.svelte";
 	import AlertTable from "$lib/components/dashboard/alert-table.svelte";
+	import AlertDetailPanel from "$lib/components/dashboard/alert-detail-panel.svelte";
 	import AlertTriangle from "@lucide/svelte/icons/triangle-alert";
 	import type { AlertFilters as AlertFiltersType } from "$lib/types/filters.js";
 	import type { SortConfig } from "$lib/types/filters.js";
-	import type { AlertSeverity } from "$lib/types/alerts.js";
+	import type { AlertSeverity, SecurityAlert } from "$lib/types/alerts.js";
 	import type { KpiSummary } from "$lib/types/kpi.js";
 
 	let { data } = $props();
@@ -33,6 +34,14 @@
 		field: "severity",
 		direction: "asc",
 	});
+
+	let selectedAlert = $state<SecurityAlert | null>(null);
+	let detailOpen = $state(false);
+
+	function handleSelectAlert(alert: SecurityAlert) {
+		selectedAlert = alert;
+		detailOpen = true;
+	}
 
 	const severityOrder: Record<AlertSeverity, number> = {
 		critical: 0,
@@ -123,5 +132,12 @@
 		alerts={filteredAlerts}
 		{sort}
 		onsort={(s) => (sort = s)}
+		onselect={handleSelectAlert}
 	/>
 </div>
+
+<AlertDetailPanel
+	alert={selectedAlert}
+	open={detailOpen}
+	onclose={() => { detailOpen = false; }}
+/>
