@@ -5,7 +5,13 @@
 	import SeverityBadge from "./severity-badge.svelte";
 	import AlertTypeIcon from "./alert-type-icon.svelte";
 	import ExternalLink from "@lucide/svelte/icons/external-link";
+	import { marked } from "marked";
+	import DOMPurify from "dompurify";
 	import type { SecurityAlert } from "$lib/types/alerts.js";
+
+	function renderMarkdown(md: string): string {
+		return DOMPurify.sanitize(marked.parse(md, { async: false }) as string);
+	}
 
 	interface Props {
 		alert: SecurityAlert | null;
@@ -146,7 +152,9 @@
 					{#if alert.ruleHelp}
 						<div class="mt-3">
 							<h4 class="text-sm font-medium text-muted-foreground mb-1">Rule Help</h4>
-							<p class="text-sm whitespace-pre-wrap">{alert.ruleHelp}</p>
+							<div class="prose prose-sm dark:prose-invert max-w-none">
+								{@html renderMarkdown(alert.ruleHelp)}
+							</div>
 						</div>
 					{/if}
 				</div>

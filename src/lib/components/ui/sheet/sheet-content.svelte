@@ -21,12 +21,14 @@
 		bind:ref
 		data-slot="sheet-content"
 		class={cn(
-			"bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right fixed inset-y-0 right-0 z-50 flex h-full w-3/4 max-w-lg flex-col gap-4 border-l p-6 shadow-lg transition-transform duration-300",
+			"bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right fixed inset-y-0 right-0 z-50 flex h-full w-full sm:w-3/4 sm:max-w-lg flex-col border-l shadow-lg transition-transform duration-300",
 			className
 		)}
 		{...restProps}
 	>
-		{@render children?.()}
+		<div class="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+			{@render children?.()}
+		</div>
 		<DialogPrimitive.Close
 			class="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none"
 		>
