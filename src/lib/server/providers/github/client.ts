@@ -7,6 +7,20 @@ export interface GitHubRateLimit {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type GhRawAlert = Record<string, any>;
 
+const GENERIC_SECRET_TYPES = [
+	"ec_private_key",
+	"generic_private_key",
+	"http_basic_authentication_header",
+	"http_bearer_authentication_header",
+	"mongodb_connection_string",
+	"mysql_connection_string",
+	"openssh_private_key",
+	"pgp_private_key",
+	"postgres_connection_string",
+	"rsa_private_key",
+	"password",
+] as const;
+
 export class GitHubClient {
 	private baseUrl = "https://api.github.com";
 	private pat: string;
@@ -57,8 +71,10 @@ export class GitHubClient {
 	}
 
 	async fetchSecretScanningAlerts(repo: string, state?: string): Promise<GhRawAlert[]> {
-		const query = state ? `?state=${state}&per_page=100` : "?per_page=100";
-		return this.get<GhRawAlert[]>(`/repos/${repo}/secret-scanning/alerts${query}`);
+		const genericTypes = GENERIC_SECRET_TYPES.join(",");
+		const params = new URLSearchParams({ per_page: "100", secret_type: genericTypes });
+		if (state) params.set("state", state);
+		return this.get<GhRawAlert[]>(`/repos/${repo}/secret-scanning/alerts?${params}`);
 	}
 
 	async fetchDependabotAlerts(repo: string, state?: string): Promise<GhRawAlert[]> {

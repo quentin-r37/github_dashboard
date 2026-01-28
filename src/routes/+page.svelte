@@ -25,7 +25,7 @@
 
 	let filters = $state<AlertFiltersType>({
 		severities: [],
-		states: [],
+		states: ["open"],
 		types: [],
 		repositories: [],
 		search: "",
